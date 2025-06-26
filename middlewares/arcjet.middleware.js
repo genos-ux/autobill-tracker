@@ -1,6 +1,6 @@
 import {aj} from "../config/arcjet.js";
 
-export const arcjetMiddleware = async(req,res,next) => {
+const arcjetMiddleware = async(req,res,next) => {
     try {
         const decision = await aj.protect(req, { requested: 1 });
 
@@ -10,8 +10,11 @@ export const arcjetMiddleware = async(req,res,next) => {
 
             return res.status(403).json({ error: 'Access denied' });
         }
+        next();
     } catch (error) {
         console.log(`Arcjet Middleware Error: ${error}`);
         next(error);
     }
 }
+
+export default arcjetMiddleware;
