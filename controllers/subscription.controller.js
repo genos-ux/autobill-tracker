@@ -37,6 +37,25 @@ export const getUserSubscriptions = async(req,res,next) =>  {
 
 export const getAllUsersSubscriptions = async(req,res,next) => {
     try {
+        const subscriptions = await Subscription.find();
+        res.status(200).json({ success: true, data: subscriptions })
+
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const getSubscriptionDetails = async(req,res,next) => {
+    try {
+        const subscriptions = await Subscription.find({user: req.user.id, _id: req.params.id});
+
+        if(!subscriptions) {
+            const error = new Error('Subscription not found');
+            error.status = 404;
+            throw error;
+        }
+
+        res.status(200).json({success: true, data: subscriptions});
         
     } catch (error) {
         next(error);
